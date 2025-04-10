@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - imagePullPolicy: Always
-        image: asia-southeast1-docker.pkg.dev/fpt-dev/web-frontend-repo/frontend-react-app:ga-0.0.3
+        image: asia-southeast1-docker.pkg.dev/fpt-dev/web-frontend-repo/frontend-react-app:ga-0.0.4
         name: frontend
         ports:
         - containerPort: 3000
