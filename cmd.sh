@@ -31,4 +31,3 @@ proxy-url: http://10.148.15.253:443
 
 argocd app create frontend --repo https://github.com/hlengoc/argocd-infra.git --path manifests --dest-server https://kubernetes.default.svc --dest-namespace app
 
-argocd repo add https://github.com/hlengoc/argocd-infra.git --username hlengoc --password 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
