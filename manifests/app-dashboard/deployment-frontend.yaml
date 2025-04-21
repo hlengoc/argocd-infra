@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - imagePullPolicy: Always
+        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-frontend:v0.0.9
+        name: frontend
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "0.2"
+            memory: "0.5G"
+          limits:
+            cpu: "0.5"
+            memory: "2G"
