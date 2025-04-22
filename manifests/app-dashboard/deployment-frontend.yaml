@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - imagePullPolicy: Always
-        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-frontend:v0.0.12
+        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-frontend:v0.0.13
         name: frontend
         env:
         # Define the environment variable
