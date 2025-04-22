@@ -4,4 +4,4 @@ metadata:
   name: frontend-config
 
 data:
-  VITE_API_BASE_URL: http://10.148.0.15:8083/api/v1
+  VITE_API_BASE_URL: http://35.198.214.38:8083/api/v1
