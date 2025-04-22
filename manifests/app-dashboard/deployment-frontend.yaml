@@ -16,8 +16,17 @@ spec:
     spec:
       containers:
       - imagePullPolicy: Always
-        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-frontend:v0.0.11
+        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-frontend:v0.0.12
         name: frontend
+        env:
+        # Define the environment variable
+        - name: VITE_API_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+              name: frontend-config
+              # Specify the key associated with the value
+              key: VITE_API_BASE_URL
         ports:
         - containerPort: 80
         resources:
