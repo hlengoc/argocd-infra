@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - imagePullPolicy: Always
-        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-backend:v0.0.5
+        image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-backend:v0.0.7
         name: frontend
         env:
         - name: DB_USERNAME
@@ -35,7 +35,7 @@ spec:
               name: db-secrets
               key: DB_URL   
         ports:
-        - containerPort: 8083
+        - containerPort: 8080
         resources:
           requests:
             cpu: "0.2"
