@@ -18,7 +18,7 @@ spec:
       - imagePullPolicy: Always
         image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-backend:v0.0.7
         name: frontend
-        livenessProbe:
+        readinessProbe:
           httpGet:
             path: /api/v1/invoices
             port: 8080
