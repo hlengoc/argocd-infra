@@ -18,6 +18,12 @@ spec:
       - imagePullPolicy: Always
         image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-backend:v0.0.7
         name: frontend
+        livenessProbe:
+          httpGet:
+            path: /api/v1
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
         env:
         - name: DB_USERNAME
           valueFrom:
