@@ -9,17 +9,17 @@ spec:
   - data:
     - key: DB_URL                           # data field to populate
       objectName: DB_URL                        # name of the mounted content to sync. this could be the object name or the object alias
-    secretName: app-dashboard-url-secret                    # name of the Kubernetes Secret object
+    secretName: app-dashboard-db-secret                    # name of the Kubernetes Secret object
     type: Opaque
   - data:
     - key: DB_USERNAME                           # data field to populate
       objectName: DB_USERNAME                        # name of the mounted content to sync. this could be the object name or the object alias
-    secretName: app-dashboard-username-secret                    # name of the Kubernetes Secret object
+    secretName: app-dashboard-db-secret                    # name of the Kubernetes Secret object
     type: Opaque
   - data:
     - key: DB_PASSWORD                           # data field to populate
       objectName: DB_PASSWORD                        # name of the mounted content to sync. this could be the object name or the object alias
-    secretName: app-dashboard-password-secret                     # name of the Kubernetes Secret object
+    secretName: app-dashboard-db-secret                     # name of the Kubernetes Secret object
     type: Opaque
   parameters:
     secrets: |
