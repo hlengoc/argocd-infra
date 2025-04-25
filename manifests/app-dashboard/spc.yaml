@@ -1,0 +1,31 @@
+# Source: accounting-dashboard/templates/spc.yaml
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: accounting-dashboard-spc
+spec:
+  provider: gcp
+  secretObjects:                              # [OPTIONAL] SecretObject defines the desired state of synced K8s secret objects
+  - data:
+    - key: DB_URL                           # data field to populate
+      objectName: DB_URL                        # name of the mounted content to sync. this could be the object name or the object alias
+    secretName:                     # name of the Kubernetes Secret object
+    type: Opaque
+  - data:
+    - key: DB_USERNAME                           # data field to populate
+      objectName: DB_USERNAME                        # name of the mounted content to sync. this could be the object name or the object alias
+    secretName: app-dashboard-secret                     # name of the Kubernetes Secret object
+    type: Opaque
+  - data:
+    - key: DB_PASSWORD                           # data field to populate
+      objectName: DB_PASSWORD                        # name of the mounted content to sync. this could be the object name or the object alias
+    secretName:                      # name of the Kubernetes Secret object
+    type: Opaque
+  parameters:
+    secrets: |
+      - resourceName: projects/871426567684/secrets/CLOUDSQL_DB_URL/versions/1
+        path: "secret"
+      - resourceName: projects/871426567684/secrets/CLOUDSQL_DB_USERNAME/versions/1
+        path: "secret"
+        - resourceName: projects/871426567684/secrets/CLOUDSQL_DB_PASSWORD/versions/1
+        path: "secret"
