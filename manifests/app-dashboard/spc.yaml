@@ -27,5 +27,5 @@ spec:
         path: "DB_URL"
       - resourceName: projects/871426567684/secrets/CLOUDSQL_DB_USERNAME/versions/1
         path: "DB_USERNAME"
-        - resourceName: projects/871426567684/secrets/CLOUDSQL_DB_PASSWORD/versions/1
+      - resourceName: projects/871426567684/secrets/CLOUDSQL_DB_PASSWORD/versions/1
         path: "DB_PASSWORD"
