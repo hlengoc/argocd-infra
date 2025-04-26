@@ -9,12 +9,9 @@ spec:
     - chart: kestra
       repoURL: https://helm.kestra.io/
       targetRevision: 0.22.4
-      helm:
-        valueFiles:
-          - $values/manifests/kestra-app/values.yaml 
-    - repoURL: https://github.com/hlengoc/argocd-infra.git
-      targetRevision: main
-      ref: values
+      # helm:
+      #   valueFiles:
+      #     - values.yaml 
   destination:
     server: https://kubernetes.default.svc
     namespace: kestra
