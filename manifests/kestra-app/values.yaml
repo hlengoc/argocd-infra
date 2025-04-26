@@ -1,0 +1,80 @@
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+
+serviceAccountName: kestra
+
+# GKE Autopilot doesn't support privilged containers, so this must be off
+dind:
+  enabled: false
+
+pluginDefaults:
+  # See: https://kestra.io/docs/installation/kubernetes#disable-docker-in-docker-and-use-kubernetes-task-runner
+  - type: io.kestra.plugin.scripts
+    forced: true
+    values:
+      taskRunner:
+        type: io.kestra.plugin.ee.kubernetes.runner.Kubernetes
+
+# For GCS integration.  See: https://kestra.io/docs/installation/kubernetes-gcp-gke#install-kestra-on-gcp-gke
+minio:
+  enabled: false
+
+configuration:
+  kestra:
+    storage:
+      type: gcs
+      gcs:
+        bucket: kestra-hillspire-data-sandbox
+        projectId: hillspire-data-sandbox
+
+deployments:
+  webserver:
+    enabled: true
+  executor:
+    enabled: true
+  indexer:
+    enabled: true
+  scheduler:
+    enabled: true
+  worker:
+    enabled: true
+  standalone:
+    enabled: false
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: kestra.apps-dev.hillspire.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  annotations:
+    # Require auth, via oauth2-proxy
+    nginx.ingress.kubernetes.io/auth-url: "https://auth.apps-dev.hillspire.com/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://auth.apps-dev.hillspire.com/oauth2/start?rd=$scheme://$host$request_uri"
+    # SSL redirect
+    nignx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # SSL cert
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+  tls:
+    - hosts:
+        - kestra.apps-dev.hillspire.com
+      secretName: kestra-tls
+
+extraManifests:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      annotations:
+        iam.gke.io/gcp-service-account: kestra-k8s@hillspire-data-sandbox.iam.gserviceaccount.com
+      labels:
+        app.kubernetes.io/instance: kestra
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: kestra
+        argocd.argoproj.io/instance: kestra
+      name: kestra
