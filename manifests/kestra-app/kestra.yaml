@@ -4,7 +4,7 @@ metadata:
   name: kestra
   namespace: kestra
 spec:
-  project: tools
+  project: default
   sources:
     - chart: kestra
       repoURL: https://helm.kestra.io/
