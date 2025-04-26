@@ -12,7 +12,7 @@ spec:
       helm:
         valueFiles:
           - $values/manifests/values/values.yaml
-    - repoURL: https://github.com/Hillspire/gcp-infra.git
+    - repoURL: https://github.com/hlengoc/argocd-infra.git
       targetRevision: main
       ref: values
   destination:
