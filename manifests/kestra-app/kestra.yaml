@@ -11,7 +11,10 @@ spec:
       targetRevision: 0.22.4
       helm:
         valueFiles:
-          - ../values/values.yaml 
+          - $values/manifests/values/values.yaml
+    - repoURL: https://github.com/Hillspire/gcp-infra.git
+      targetRevision: main
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: kestra
