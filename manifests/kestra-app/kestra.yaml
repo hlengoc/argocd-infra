@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kestra
-  namespace: kestra
+  name: kestra-auto
+  namespace: argocd
 spec:
   project: default
   sources:
     - chart: kestra
       repoURL: https://helm.kestra.io/
       targetRevision: 0.22.4
-      # helm:
-      #   valueFiles:
-      #     - values.yaml 
+      helm:
+        valueFiles:
+          - ../values/values.yaml 
   destination:
     server: https://kubernetes.default.svc
     namespace: kestra
@@ -19,6 +19,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+
 
