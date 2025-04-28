@@ -38,7 +38,7 @@ spec:
       releaseName: kestra
       values: |
         image:
-          image: asia-southeast1-docker.pkg.dev/fpt-dev/kestra-repo/kestra-custom:
+          image: asia-southeast1-docker.pkg.dev/fpt-dev/kestra-repo/kestra-custom
           tag: v0.0.7
   destination:
     server: "https://kubernetes.default.svc"
