@@ -40,6 +40,8 @@ spec:
         image:
           image: asia-southeast1-docker.pkg.dev/fpt-dev/kestra-repo/kestra-custom
           tag: v0.0.7
+        service:
+          type: LoadBalancer
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kestra-custom
