@@ -1,26 +1,46 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: kestra-auto
+#   namespace: argocd
+# spec:
+#   project: default
+#   sources:
+#     - chart: kestra
+#       repoURL: https://helm.kestra.io/
+#       targetRevision: 0.22.4
+#       helm:
+#         valueFiles:
+#           - $values/manifests/values/values.yaml
+#     - repoURL: https://github.com/hlengoc/argocd-infra.git
+#       targetRevision: main
+#       ref: values
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: kestra
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kestra-auto
+  name: kestra-custom
   namespace: argocd
 spec:
   project: default
-  sources:
-    - chart: kestra
-      repoURL: https://helm.kestra.io/
-      targetRevision: 0.22.4
-      helm:
-        valueFiles:
-          - $values/manifests/values/values.yaml
-    - repoURL: https://github.com/hlengoc/argocd-infra.git
-      targetRevision: main
-      ref: values
+  source:
+    chart: kestra
+    repoURL: https://helm.kestra.io/
+    targetRevision: 0.22.4
+    helm:
+      releaseName: kestra
+      values: |
+        image:
+          image: asia-southeast1-docker.pkg.dev/fpt-dev/kestra-repo/kestra-custom:
+          tag: v0.0.7
   destination:
-    server: https://kubernetes.default.svc
-    namespace: kestra
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-
+    server: "https://kubernetes.default.svc"
+    namespace: kestra-custom
 
