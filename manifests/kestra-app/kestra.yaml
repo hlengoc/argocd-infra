@@ -31,17 +31,22 @@ metadata:
 spec:
   project: default
   source:
-    chart: kestra
-    repoURL: https://helm.kestra.io/
-    targetRevision: 0.22.4
-    helm:
-      releaseName: kestra
-      values: |
-        image:
-          image: asia-southeast1-docker.pkg.dev/fpt-dev/kestra-repo/kestra-custom
-          tag: v0.0.7
-        service:
-          type: LoadBalancer
+    - chart: kestra
+      repoURL: https://helm.kestra.io/
+      targetRevision: 0.22.4
+      helm:
+        releaseName: kestra
+        valueFiles:
+          - $values/manifests/values/kestra-values.yaml
+        values: |
+          image:
+            image: asia-southeast1-docker.pkg.dev/fpt-dev/kestra-repo/kestra-custom
+            tag: v0.0.7
+          service:
+            type: LoadBalancer
+    - repoURL: https://github.com/hlengoc/argocd-infra.git
+      targetRevision: main
+      ref: values
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kestra-custom
