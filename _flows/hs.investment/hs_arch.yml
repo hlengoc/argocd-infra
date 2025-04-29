@@ -1,0 +1,17 @@
+id: hs_arch
+namespace: hs.investment
+
+variables:
+  client_id: "Mb68RJVtvO1nnmGnwacHbLoARRTqdnMv"
+  client_secret: "U-ikRo_gzopKc5OOMADTfHKU602Cr0MtygB082l07ELOJaDXpZfjbRnsvFlYlufS"
+tasks:
+  - id: arch-bigquery
+    type: io.kestra.plugin.airbyte.connections.Sync
+    connectionId: 2585bbbd-e490-4bce-8d60-4ab6384fe23e
+    url: http://airbyte-airbyte-webapp-svc.airbyte.svc.cluster.local
+    username: devops@hillspire.com
+triggers:
+  - id: schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: 30 3 * * *
+    timezone: America/Chicago
