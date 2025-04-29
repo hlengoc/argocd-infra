@@ -1,0 +1,59 @@
+id: hs-custodian-goldman
+namespace: hs.investment
+description: >-
+  Daily flow that fetches the Goldman Sachs Hill Spire encrypted file for the
+  current run-date, decrypts it, stores the plaintext as a `.txt` in a Google
+  Cloud Storage bucket, removes the encrypted artefacts, and then launches the
+  Airbyte sync that lands the data in BigQuery.
+
+# ──────────────────────────────────────────────
+#  Tasks
+# ──────────────────────────────────────────────
+
+tasks:
+  # 1️⃣  Download today’s PGP file(s) from SFTP
+  - id: download_pgp
+    type: io.kestra.plugin.fs.sftp.Downloads
+    host: sfx2.gs.com
+    username: "{{ secret('GS_SFTP_USERNAME') }}"
+    password: "{{ secret('GS_SFTP_PASSWORD') }}"
+    from: "/outbound/"
+    # Match Hill_Spire_<YYYYMMDD>*\.pgp where YYYYMMDD = execution date
+    regExp: "^Hill_Spire_{{ (trigger.date ?? execution.startDate) | date('yyyyMMdd') }}.*\\.pgp$"
+    recursive: false
+    action: NONE
+
+  # 2️⃣ & 3️⃣ Decrypt → upload to GCS (.txt) → delete encrypted copy
+  - id: process_files
+    type: io.kestra.plugin.core.flow.ForEach
+    concurrencyLimit: 4
+    values: "{{ outputs.download_pgp.outputFiles.values() }}"
+    tasks:
+      # Decrypt the .pgp file
+      - id: decrypt
+        type: io.kestra.plugin.crypto.openpgp.Decrypt
+        from: "{{ taskrun.value }}"
+        privateKey: "{{ secret('PGP_PRIVATE_KEY') }}"
+        privateKeyPassphrase: "{{ secret('PGP_PASSPHRASE') }}"
+
+      # Upload the decrypted file to GCS with .txt extension
+      - id: upload_to_gcs
+        type: io.kestra.plugin.gcp.gcs.Upload
+        from: "{{ outputs.decrypt.uri }}"
+        projectId: "{{ secret('GCP_PROJECT_ID') }}"
+        serviceAccount: "{{ secret('GCP_SA_JSON') }}"
+        to: "gs://{{ secret('GCS_BUCKET') }}/goldman/{{ (trigger.date ?? execution.startDate) | date('yyyyMMdd') }}/{{ taskrun.value | filename | replace('.pgp', '.txt') }}"
+
+      # Delete the encrypted artefact from Kestra’s internal storage
+      - id: delete_encrypted
+        type: io.kestra.plugin.core.storage.Delete
+        uri: "{{ taskrun.value }}"
+
+  # 4️⃣  Kick off the downstream Airbyte sync into BigQuery
+  - id: trigger_airbyte
+    type: io.kestra.plugin.airbyte.connections.Sync
+    url: "{{ secret('AIRBYTE_URL') }}"
+    username: "{{ secret('AIRBYTE_USERNAME') }}"
+    password: "{{ secret('AIRBYTE_PASSWORD') }}"
+    connectionId: "{{ secret('AIRBYTE_CONNECTION_ID') }}"
+    wait: true

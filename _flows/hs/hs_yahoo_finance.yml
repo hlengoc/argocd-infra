@@ -1,0 +1,7 @@
+id: hs_yahoo_finance
+namespace: hs.investment
+
+tasks:
+  - id: hello
+    type: io.kestra.plugin.core.log.Log
+    message: Hello World! 🚀
