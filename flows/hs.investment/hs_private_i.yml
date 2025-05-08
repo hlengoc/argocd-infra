@@ -1,0 +1,14 @@
+id: hs_private_i
+namespace: hs.investment
+
+tasks:
+  - id: private-i-bigquery
+    type: io.kestra.plugin.airbyte.connections.Sync
+    connectionId: f5e1e7dc-f855-48ec-97c7-8054cf87a378
+    url: http://airbyte-airbyte-webapp-svc.airbyte.svc.cluster.local
+    username: devops@hillspire.com
+triggers:
+  - id: schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: 30 1 * * *
+    timezone: America/Chicago

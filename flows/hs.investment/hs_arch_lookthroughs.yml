@@ -1,0 +1,36 @@
+id: hs_arch_lookthroughs
+namespace: hs.investment
+
+tasks:
+  - id: query_arch_issuing_entities
+    type: io.kestra.plugin.gcp.bigquery.Query
+    fetchType: FETCH
+    sql: SELECT id FROM `hillspire-data-sandbox.investment_mart.investment_arch_Issuing_Entities` WHERE hasLookthroughData = true
+  - id: get_arch_auth_token
+    type: io.kestra.plugin.core.http.Request
+    body: |-
+      {
+          "clientId":"Mb68RJVtvO1nnmGnwacHbLoARRTqdnMv",
+          "clientSecret":"U-ikRo_gzopKc5OOMADTfHKU602Cr0MtygB082l07ELOJaDXpZfjbRnsvFlYlufS"
+      }
+    method: POST
+    uri: https://arch.co/client-api/v0/auth/token
+  - id: get_lookthroughs
+    type: io.kestra.plugin.core.flow.ForEach
+    tasks:
+      - id: get_lookthrough_data
+        type: io.kestra.plugin.core.http.Request
+        allowFailure: true
+        allowWarning: true
+        headers:
+          accept: application/json
+          authorization: Bearer {{ outputs.get_arch_auth_token["body"] | jq(".accessToken") | first}}
+        uri: https://arch.co/client-api/v0/issuing-entities/{{taskrun.value}}?includeLookthroughs=true
+      - id: update_bq
+        type: io.kestra.plugin.gcp.bigquery.Query
+        fetchType: NONE
+        sql: UPDATE `hillspire-data-sandbox.investment_mart.investment_arch_Issuing_Entities` SET underlyingLookthroughs = TO_JSON('{{ outputs.get_lookthrough_data[taskrun.value]['body'] | jq('.underlyingLookthroughs') | first | first  }}') WHERE id = {{ taskrun.value }}
+    allowFailure: true
+    allowWarning: true
+    concurrencyLimit: 1
+    values: "{{ outputs.query_arch_issuing_entities.rows | jq('[.[].id | \"\\(.)\" | split(\".\") | .[0]]') | first }}"
