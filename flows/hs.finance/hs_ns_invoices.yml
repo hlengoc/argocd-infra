@@ -1,0 +1,74 @@
+id: hs_ns_invoices
+namespace: hs.finance
+
+variables:
+  gcs_base_path: gs://hs_accounting_dashboard
+  bq_dataset: accts_payable_mart
+  gcp_project_id: hillspire-data-sandbox
+
+tasks:
+  - id: get_ns_pw
+    type: io.kestra.plugin.gcp.cli.GCloudCLI
+    commands:
+      - gcloud secrets versions access 1 --secret="ns-pw"
+  - id: ingest_ns_invoices
+    type: io.kestra.plugin.scripts.python.Commands
+    commands:
+      - python scripts/ingest_ns_invoices.py
+    env:
+      NS_ACCOUNT_ID: 1036338_SB1
+      NS_ROLE_ID: "1212"
+      NS_ROOT_URL: 1036338-sb1.connect.api.netsuite.com
+      NS_USERNAME: integrations@hillspire.com
+      NS_PW: "{{ outputs.get_ns_pw }}"
+
+    namespaceFiles:
+      enabled: true
+    outputFiles:
+      - "*.parquet"
+    retry:
+      type: constant
+      interval: PT1M
+      maxAttempt: 1
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    warningOnStdErr: false
+  - id: upload_to_gcs
+    type: io.kestra.plugin.core.flow.ForEach
+    values: "{{ outputs.ingest_ns_invoices.outputFiles | keys }}"
+    concurrencyLimit: 0
+    tasks:
+      - id: upload_file
+        type: io.kestra.plugin.gcp.gcs.Upload
+        from: "{{ outputs.ingest_ns_invoices.outputFiles[taskrun.value] }}"
+        serviceAccount: "{{ kv('GCP_CREDS', 'hs') }}"
+        to: "{{vars.gcs_base_path}}/ns_invoices_raw{{taskrun.value}}"
+        retry:
+          type: constant
+          maxAttempt: 3
+          interval: PT1M
+  - id: create_ext_bq_tbls
+    type: io.kestra.plugin.core.flow.ForEach
+    values: "{{ outputs.ingest_ns_invoices.outputFiles | keys }}"
+    concurrencyLimit: 1
+    tasks:
+      - id: create_ext_bq_tbl
+        type: io.kestra.plugin.gcp.bigquery.Query
+        projectId: "{{ kv('GCP_PROJECT_ID', 'hs') }}"
+        retry:
+          type: constant
+          interval: PT1M
+          maxAttempt: 1
+        serviceAccount: "{{ kv('GCP_CREDS', 'hs') }}"
+        sql: >
+          CREATE OR REPLACE EXTERNAL TABLE `{{ kv('GCP_PROJECT_ID', 'hs') }}.{{vars.bq_dataset}}.ns_invoices`  OPTIONS (
+            format = 'PARQUET',
+            uris = ["{{vars.gcs_base_path}}/ns_invoices_raw{{taskrun.value}}"]
+          )
+triggers:
+  - id: schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    inputs:
+      ns_pw: tah_rph6hej4qrn!UHX
+    cron: 00 4 * * *
+    timezone: America/Chicago
