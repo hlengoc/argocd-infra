@@ -1,0 +1,13 @@
+id: hs_at_ems
+namespace: hs.ems
+tasks:
+  - id: at-ems-bigquery
+    type: io.kestra.plugin.airbyte.connections.Sync
+    connectionId: 04482dd0-b732-40dc-9cb6-dc3783092b00
+    url: http://airbyte-airbyte-webapp-svc.airbyte.svc.cluster.local
+    username: devops@hillspire.com
+triggers:
+  - id: schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: 00 3 * * *
+    timezone: America/Chicago
