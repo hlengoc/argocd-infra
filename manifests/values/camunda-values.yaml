@@ -68,3 +68,35 @@ zeebeGateway:
       cpu: 500m
     limits:
       cpu: 1
+
+elasticsearch:
+  master:
+    resources:
+      requests:
+        cpu: 0.5
+        memory: 500Mi
+
+identity:
+  resources:
+    requests:
+      cpu: 400m
+
+identityKeycloak:
+  resources:
+    requests:
+      cpu: 400m
+
+console:
+  resources:
+    requests:
+      cpu: 400m
+
+zeebe:
+  resources:
+    requests:
+      cpu: 400m
+
+tasklist:
+  resources:
+    requests:
+      cpu: 400m
