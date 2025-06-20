@@ -4,7 +4,7 @@ metadata:
   name: camunda
   namespace: argo-cd
 spec:
-  project: tools
+  project: default
   sources:
     - chart: camunda-platform
       repoURL: https://helm.camunda.io
