@@ -1,0 +1,70 @@
+# global:
+#   ingress:
+#     enabled: true
+#     className: nginx
+#     host: "camunda.apps-dev.hillspire.com"
+#     annotations:
+#       # Require auth, via oauth2-proxy 
+#       nginx.ingress.kubernetes.io/auth-url: "https://auth.apps-dev.hillspire.com/oauth2/auth"
+#       nginx.ingress.kubernetes.io/auth-signin: "https://auth.apps-dev.hillspire.com/oauth2/start?rd=$scheme://$host$request_uri"
+#       # SSL redirect
+#       nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#       # SSL cert
+#       kubernetes.io/tls-acme: "true"
+#       cert-manager.io/cluster-issuer: "letsencrypt-production"
+#     tls:
+#       enabled: true
+#       secretName: camunda-tls
+#   identity:
+#     auth:
+#       publicIssuerUrl: "https://camunda.apps-dev.hillspire.com/auth/realms/camunda-platform"
+#       operate:
+#         redirectUrl: "https://camunda.apps-dev.hillspire.com/operate"
+#       tasklist:
+#         redirectUrl: "https://camunda.apps-dev.hillspire.com/tasklist"
+#       optimize:
+#         redirectUrl: "https://camunda.apps-dev.hillspire.com/optimize"
+#       webModeler:
+#         redirectUrl: "https://camunda.apps-dev.hillspire.com/modeler"
+#       console:
+#         redirectUrl: "https://camunda.apps-dev.hillspire.com/console"
+
+# identity:
+#   contextPath: "/identity"
+#   fullURL: "https://camunda.apps-dev.hillspire.com/identity"
+
+# operate:
+#   contextPath: "/operate"
+
+# optimize:
+#   contextPath: "/optimize"
+
+# tasklist:
+#   contextPath: "/tasklist"
+
+# webModeler:
+#   # The context path is used for the web application that will be accessed by users in the browser.
+#   # In addition, a WebSocket endpoint will be exposed on "[contextPath]-ws", e.g. "/modeler-ws".
+#   contextPath: "/modeler"
+
+# console:
+#   enabled: true
+#   contextPath: "/console"
+
+# connectors:
+#   contextPath: "/connectors"
+
+# zeebeGateway:
+#   contextPath: "/zeebe"
+#   ingress:
+#     grpc:
+#       enabled: true
+#       className: nginx
+#       host: "zeebe.camunda.apps-dev.hillspire.com"
+
+zeebeGateway:
+  resources:
+    requests:
+      cpu: 500m
+    limits:
+      cpu: 1

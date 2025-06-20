@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: camunda
+  namespace: argo-cd
+spec:
+  project: tools
+  sources:
+    - chart: camunda-platform
+      repoURL: https://helm.camunda.io
+      targetRevision: 12.1.0
+      helm:
+        valueFiles:
+          - $values/manifests/values/camunda-values.yaml
+    - repoURL: https://github.com/hlengoc/argocd-infra.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: camunda
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

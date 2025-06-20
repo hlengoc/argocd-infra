@@ -1,0 +1,38 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   labels:
+#     app: frontend
+#   name: frontend
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: frontend
+#   template:
+#     metadata:
+#       labels:
+#         app: frontend
+#     spec:
+#       containers:
+#       - imagePullPolicy: Always
+#         image: asia-southeast1-docker.pkg.dev/fpt-dev/app-dashboard-repo/app-dashboard-frontend:v0.0.18
+#         name: frontend
+#         # env:
+#         # # Define the environment variable
+#         # - name: VITE_API_BASE_URL
+#         #   valueFrom:
+#         #     configMapKeyRef:
+#         #       # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+#         #       name: frontend-config
+#         #       # Specify the key associated with the value
+#         #       key: VITE_API_BASE_URL
+#         ports:
+#         - containerPort: 80
+#         resources:
+#           requests:
+#             cpu: "0.2"
+#             memory: "0.5G"
+#           limits:
+#             cpu: "0.5"
+#             memory: "2G"
