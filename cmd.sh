@@ -31,3 +31,15 @@ proxy-url: http://10.148.15.253:443
 
 argocd app create frontend --repo https://github.com/hlengoc/argocd-infra.git --path manifests --dest-server https://kubernetes.default.svc --dest-namespace app
 
+
+# Get user's home directory
+$homeDir = [Environment]::GetFolderPath("UserProfile")
+$npmrcPath = Join-Path $homeDir ".npmrc"
+
+# Proxy configuration to add
+$proxyConfig = @"
+proxy=http://10.148.15.253:443
+"@
+
+# Write to .npmrc (overwrite or create)
+Set-Content -Path $npmrcPath -Value $proxyConfig -Encoding UTF8
