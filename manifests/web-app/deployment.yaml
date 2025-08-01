@@ -19,7 +19,7 @@ spec:
         image: asia-southeast1-docker.pkg.dev/fpt-dev/web-frontend-repo/frontend-react-app:ga-0.0.8
         name: frontend
         ports:
-        - containerPort: 80
+        - containerPort: 5173
         resources:
           requests:
             cpu: "0.2"
