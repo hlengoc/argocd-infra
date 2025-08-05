@@ -19,3 +19,12 @@ $content = Get-Content -Path $filePath -Raw
 $updatedContent = $content -replace [regex]::Escape($oldText), $newText
 # Write updated content back to file
 Set-Content -Path $filePath -Value $updatedContent -Encoding UTF8
+
+# Set proper permissions for PostgreSQL service account
+$filePath = "C:\Program Files\PostgreSQL\16\data\pg_hba.conf"
+$acl = Get-Acl $filePath
+$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\NETWORK SERVICE","FullControl","Allow")
+$acl.SetAccessRule($accessRule)
+$accessRule2 = New-Object System.Security.AccessControl.FileSystemAccessRule("postgres","FullControl","Allow")
+$acl.SetAccessRule($accessRule2)
+Set-Acl $filePath $acl
