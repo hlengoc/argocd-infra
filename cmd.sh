@@ -43,3 +43,5 @@ proxy=http://10.148.15.253:443
 
 # Write to .npmrc (overwrite or create)
 Set-Content -Path $npmrcPath -Value $proxyConfig -Encoding UTF8
+
+gcloud projects add-iam-policy-binding fpt-dev --role="roles/secretmanager.secretAccessor" --member="principal://iam.googleapis.com/projects/871426567684/locations/global/workloadIdentityPools/fpt-dev.svc.id.goog/subject/ns/app/sa/eso-secrets-sa"
