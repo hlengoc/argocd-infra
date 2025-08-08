@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: backend
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - image: asia-southeast1-docker.pkg.dev/fpt-dev/hs-web-app/backend:v0.0.1
+        imagePullPolicy: Always
+        name: backend
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: "0.2"
+            memory: "0.5G"
+          limits:
+            cpu: "0.5"
+            memory: "2G"
