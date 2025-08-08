@@ -15,7 +15,7 @@ spec:
         app: backend
     spec:
       containers:
-      - image: asia-southeast1-docker.pkg.dev/fpt-dev/hs-web-app/backend:v0.0.1
+      - image: asia-southeast1-docker.pkg.dev/fpt-dev/hs-web-app/backend:v0.0.2
         imagePullPolicy: Always
         name: backend
         ports:
