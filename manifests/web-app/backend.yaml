@@ -29,8 +29,7 @@ spec:
             memory: "2G"
         volumeMounts:
         - name: secret-volume
-          mountPath: /secrets/.env
-          subPath: .env
+          mountPath: /secrets
           readOnly: true
       volumes:
       - name: secret-volume
@@ -38,5 +37,5 @@ spec:
           secretName: app-secret
           items:
           - key: env
-            path: .env
+            path: env
 
