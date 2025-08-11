@@ -36,5 +36,5 @@ spec:
         secret:
           secretName: app-secret
           # items:
-          # - key: .env
+          # - key: env
           #   path: .env
