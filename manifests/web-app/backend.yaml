@@ -35,6 +35,6 @@ spec:
       - name: secret-volume
         secret:
           secretName: app-secret
-          # items:
-          # - key: env
-          #   path: .env
+          items:
+          - key: env
+            path: .env
