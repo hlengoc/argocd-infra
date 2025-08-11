@@ -29,7 +29,7 @@ spec:
             memory: "2G"
         volumeMounts:
         - name: secret-volume
-          mountPath: /app
+          mountPath: /secrets
           readOnly: true
       volumes:
       - name: secret-volume
