@@ -27,3 +27,14 @@ spec:
           limits:
             cpu: "0.5"
             memory: "2G"
+        volumeMounts:
+        - name: secret-volume
+          mountPath: /app
+          readOnly: true
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: app-secret
+          items:
+          - key: .env
+            path: .env
