@@ -5,7 +5,7 @@ metadata:
     app: frontend
   name: frontend
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
       app: frontend
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - imagePullPolicy: Always
-        image: asia-southeast1-docker.pkg.dev/fpt-dev/hs-web-app/frontend:v0.0.7
+        image: asia-southeast1-docker.pkg.dev/fpt-dev/hs-web-app/frontend:v0.0.8
         name: frontend
         ports:
         - containerPort: 80
