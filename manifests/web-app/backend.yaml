@@ -30,9 +30,11 @@ spec:
         volumeMounts:
         - name: secret-volume
           mountPath: /app/.env
+          subPath: .env
           readOnly: true
         - name: json-config-volume
           mountPath: /app/config.json
+          subPath: config.json
           readOnly: true
       volumes:
       - name: secret-volume
