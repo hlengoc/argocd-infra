@@ -29,12 +29,20 @@ spec:
             memory: "2G"
         volumeMounts:
         - name: secret-volume
-          mountPath: /app/.env
-          subPath: .env
+          mountPath: /app
+          readOnly: true
+        - name: json-config-volume
+          mountPath: /app
           readOnly: true
       volumes:
       - name: secret-volume
         secret:
           secretName: app-secret
-
+      - name: json-config-volume
+        secret:
+          secretName: json-config-secret
+          # items:
+          # - key: config.json
+          #   path: config.json
+          #   mode: 0644
 
