@@ -20,7 +20,7 @@ spec:
         - --email-domain=*
         - --upstream=file:///dev/null
         - --http-address=0.0.0.0:4180
-        - --oidc-issuer-url = "https://integrator-3675101.okta.com/oauth2/ausvct3aotZ9D95SX697"
+        - --oidc-issuer-url=https://integrator-3675101.okta.com/oauth2/ausvct3aotZ9D95SX697
         - --redirect-url=https://frontend.haile.click/login/callback
         # Register a new application
         # https://github.com/settings/applications/new
